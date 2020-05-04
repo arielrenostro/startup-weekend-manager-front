@@ -1,6 +1,8 @@
 import React, {createContext, useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 
+import {sendOTP, verifyOTP} from '../../services/api';
+
 
 const UserContext = createContext({
     userInfo: undefined,
@@ -13,12 +15,14 @@ const UserContext = createContext({
 const UserContextProvider = ({ children }) => {
     const [userInfo, setUserInfo] = useState(undefined)
 
-    const sendCode = (cellphone) => {
-      // TODO Call api to send the code  
+    const sendCode = async (cellphone) => {
+      const response = await sendOTP(cellphone);
+      console.log(response)
     }
 
-    const verifyCode = (code) => {
-        // TODO Call verify code
+    const verifyCode = async (code) => {
+        const response = await verifyOTP(code);
+        console.log(response)
 
         AsyncStorage.setItem('token', 'save your token').then(() => {
             setUserInfo({
@@ -59,6 +63,7 @@ const UserContextProvider = ({ children }) => {
                 verifyCode,
                 getUserInfo,
                 logout}}>
+                    
             {children}
         </UserContext.Provider>
     )

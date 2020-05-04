@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react';
-import { View, ScrollView, StyleSheet, Alert } from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import { TextInputMask } from 'react-native-masked-text'
 import SmsRetriever from 'react-native-sms-retriever';
 import Toast from 'react-native-simple-toast';
@@ -11,6 +11,7 @@ import {
 } from 'react-native-elements';
 
 import {UserContext} from '../../context/user';
+import {unmaskCellphone} from '../../utils/masker';
 
 
 const styles = StyleSheet.create({
@@ -49,6 +50,7 @@ const styles = StyleSheet.create({
 
 const SignIn = ({ navigation }) => {
     const { sendCode } = useContext(UserContext);
+    
     const [codePhase, setCodePhase] = useState(false);
     const [cellphone, setCellphone] = useState("");
     const [code, setCode] = useState("");
@@ -72,17 +74,21 @@ const SignIn = ({ navigation }) => {
             return (
                 <View style={styles.formContainer}>
                     <Input
+                        keyboardType='numeric'
                         leftIcon={{ type: 'font-awesome', name: 'key' }}
                         placeholder="Código"
                         value={code}
-                        onChange={value => {
-                            setCode(value);
+                        onChangeText={value => {
+                            if (value == '' || /^\d+$/.test(value)) {
+                                setCode(value);
+                            }
                         }}
                         maxLength={6}
                     />
 
                     <Button 
                         buttonStyle={styles.actionButton}
+                        disabled={code.length < 6}
                         title="Entrar"
                     />
                     
@@ -142,9 +148,10 @@ const SignIn = ({ navigation }) => {
                     
                     <Button 
                         title="Enviar"
+                        disabled={unmaskCellphone(cellphone).length < 11}
                         buttonStyle={styles.actionButton}
                         onPress={() => {
-                            sendCode(cellphone);
+                            sendCode(unmaskCellphone(cellphone));
                             setCodePhase(true);
                             Toast.show('Código enviado com sucesso!');
                         }}
