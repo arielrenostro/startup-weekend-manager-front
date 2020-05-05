@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import {UserContextProvider} from './context/user';
-import Navigator from './navigation';
+import Navigator from './base_navigation';
 
 const App = () => {
     return (

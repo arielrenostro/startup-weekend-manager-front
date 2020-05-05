@@ -4,11 +4,12 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 import {UserContext} from '../context/user';
 import SignIn from '../pages/signin';
 import Home from '../pages/home';
 import Scheduler from '../pages/scheduler';
-
+import Profile from '../pages/profile';
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -28,7 +29,7 @@ const LoginStackNavigation = () => {
 const MainNavigation = () => {
     return (
         <BottomTab.Navigator
-          initialRouteName="Feed"
+          initialRouteName="Scheduler"
           tabBarOptions={{
             activeTintColor: '#11B22B',
           }}>
@@ -37,7 +38,7 @@ const MainNavigation = () => {
               name="Home" 
               component={Home}
               options={{
-                  tabBarLabel: 'Principal',
+                  tabBarLabel: 'Início',
                   tabBarIcon: ({ color, size }) => (
                     <Icon name="home" color={color} size={size} />
                   ),
@@ -57,7 +58,7 @@ const MainNavigation = () => {
 
             <BottomTab.Screen 
               name="Perfil" 
-              component={Scheduler}
+              component={Profile}
               options={{
                   tabBarLabel: 'Perfil',
                   tabBarIcon: ({ color, size }) => (
@@ -74,7 +75,7 @@ export default () => {
 
     return (
         <NavigationContainer>
-            {userInfo ? <MainNavigation /> : <MainNavigation />}
+            {userInfo ? <MainNavigation /> : <LoginStackNavigation />}
         </NavigationContainer>
     )
 }
